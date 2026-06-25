@@ -334,56 +334,58 @@
     </div>
 
     <script>
-        // DỮ LIỆU GỐC VỚI CÁC MỨC GIÁ CK TÍNH SẴN
+        // DỮ LIỆU CẬP NHẬT THEO BẢNG GIÁ 8% THUẾ TỪ NGÀY 10.03.2026
         // Giá trong bảng gốc (nghìn đồng) × 1000 = VNĐ
         const DEFAULT_PRODUCTS = [
             // Kiểm soát cân nặng
-            { id: 1, name: 'F1', category: 'Kiểm soát cân nặng', pv: 23.95, prices: { 0: 1149120, 25: 899740, 35: 799990, 42: 730160, 50: 650360 } },
-            { id: 2, name: 'Protein', category: 'Kiểm soát cân nặng', pv: 17.95, prices: { 0: 891000, 25: 693800, 35: 614920, 42: 559700, 50: 496590 } },
-            { id: 3, name: 'Trà', category: 'Kiểm soát cân nặng', pv: 19.95, prices: { 0: 840240, 25: 654310, 35: 579930, 42: 527870, 50: 468370 } },
-            { id: 4, name: 'Prolessa Duo 74,2g', category: 'Kiểm soát cân nặng', pv: 21.7, prices: { 0: 1015200, 25: 803020, 35: 718150, 42: 658740, 50: 590840 } },
-            { id: 5, name: 'Prolessa Duo 318g', category: 'Kiểm soát cân nặng', pv: 65.2, prices: { 0: 3053160, 25: 2415230, 35: 2160060, 42: 1981440, 50: 1777310 } },
-            { id: 6, name: 'Cell A', category: 'Kiểm soát cân nặng', pv: 21.95, prices: { 0: 930960, 25: 724940, 35: 642530, 42: 584840, 50: 518920 } },
-            { id: 7, name: 'Cell U', category: 'Kiểm soát cân nặng', pv: 15.75, prices: { 0: 697680, 25: 543350, 35: 481610, 42: 438400, 50: 389010 } },
+            { id: 1, name: 'F1', category: 'Kiểm soát cân nặng', pv: 23.95, prices: { 0: 1178280, 25: 922660, 35: 820420, 42: 748840, 50: 667050 } },
+            { id: 2, name: 'Protein', category: 'Kiểm soát cân nặng', pv: 17.95, prices: { 0: 913680, 25: 711550, 35: 630690, 42: 574100, 50: 509410 } },
+            { id: 3, name: 'Trà', category: 'Kiểm soát cân nặng', pv: 19.95, prices: { 0: 860760, 25: 670180, 35: 593940, 42: 540580, 50: 479600 } },
+            { id: 4, name: 'Prolessa Duo 74,2g', category: 'Kiểm soát cân nặng', pv: 21.7, prices: { 0: 1041120, 25: 823640, 35: 736640, 42: 675750, 50: 606150 } },
+            { id: 5, name: 'Prolessa Duo 318g', category: 'Kiểm soát cân nặng', pv: 65.2, prices: { 0: 3129840, 25: 2475960, 35: 2214410, 42: 2031330, 50: 1822090 } },
+            { id: 6, name: 'Cell A', category: 'Kiểm soát cân nặng', pv: 21.95, prices: { 0: 954720, 25: 743550, 35: 659080, 42: 599950, 50: 532380 } },
+            { id: 7, name: 'Cell U', category: 'Kiểm soát cân nặng', pv: 15.75, prices: { 0: 714960, 25: 556770, 35: 493490, 42: 449200, 50: 398580 } },
             // Tăng cường đề kháng
-            { id: 8, name: 'Vitamin', category: 'Tăng cường đề kháng', pv: 10, prices: { 0: 462240, 25: 360090, 35: 319230, 42: 290620, 50: 257930 } },
-            { id: 9, name: 'Immulift', category: 'Tăng cường đề kháng', pv: 27.25, prices: { 0: 1254960, 25: 977410, 35: 866390, 42: 788670, 50: 699850 } },
+            { id: 8, name: 'Vitamin', category: 'Tăng cường đề kháng', pv: 10, prices: { 0: 474120, 25: 369410, 35: 327530, 42: 298210, 50: 264710 } },
+            { id: 9, name: 'Immulift', category: 'Tăng cường đề kháng', pv: 27.25, prices: { 0: 1286280, 25: 1001790, 35: 887990, 42: 808330, 50: 717300 } },
             // Hệ Tiêu Hóa
-            { id: 10, name: 'Lô Hội', category: 'Hệ Tiêu Hóa', pv: 24.95, prices: { 0: 1128600, 25: 878970, 35: 779120, 42: 709230, 50: 629350 } },
-            { id: 11, name: 'Xơ hoạt hóa', category: 'Hệ Tiêu Hóa', pv: 22.95, prices: { 0: 1065960, 25: 830050, 35: 735690, 42: 669630, 50: 594140 } },
-            { id: 12, name: 'Probiotic', category: 'Hệ Tiêu Hóa', pv: 20.45, prices: { 0: 937440, 25: 729950, 35: 646950, 42: 588850, 50: 522460 } },
+            { id: 10, name: 'Lô Hội', category: 'Hệ Tiêu Hóa', pv: 24.95, prices: { 0: 1156680, 25: 900810, 35: 798470, 42: 726820, 50: 644940 } },
+            { id: 11, name: 'Xơ hoạt hóa', category: 'Hệ Tiêu Hóa', pv: 22.95, prices: { 0: 1092960, 25: 851150, 35: 754430, 42: 686730, 50: 609350 } },
+            { id: 12, name: 'Probiotic', category: 'Hệ Tiêu Hóa', pv: 20.45, prices: { 0: 961200, 25: 748520, 35: 663450, 42: 603900, 50: 535840 } },
             // Tim mạch
-            { id: 13, name: 'Nitework', category: 'Tim mạch', pv: 48.75, prices: { 0: 2199960, 25: 1713200, 35: 1518500, 42: 1382200, 50: 1226440 } },
-            { id: 14, name: 'Herbalifeline', category: 'Tim mạch', pv: 25.75, prices: { 0: 1072440, 25: 835060, 35: 740110, 42: 673640, 50: 597680 } },
+            { id: 13, name: 'Nitework', category: 'Tim mạch', pv: 48.75, prices: { 0: 2255040, 25: 1756110, 35: 1556540, 42: 1416840, 50: 1257180 } },
+            { id: 14, name: 'Herbalifeline', category: 'Tim mạch', pv: 25.75, prices: { 0: 1099440, 25: 856130, 35: 758800, 42: 690670, 50: 612810 } },
             // Xương khớp
-            { id: 15, name: 'Xtra-cal', category: 'Xương khớp', pv: 10.7, prices: { 0: 536760, 25: 417950, 35: 370420, 42: 337160, 50: 299140 } },
-            { id: 16, name: 'Join Support', category: 'Xương khớp', pv: 20.9, prices: { 0: 935280, 25: 728280, 35: 645480, 42: 587520, 50: 521280 } },
+            { id: 15, name: 'Xtra-cal', category: 'Xương khớp', pv: 10.7, prices: { 0: 549720, 25: 427940, 35: 379230, 42: 345130, 50: 306160 } },
+            { id: 16, name: 'Join Support', category: 'Xương khớp', pv: 20.9, prices: { 0: 959040, 25: 746860, 35: 661990, 42: 602580, 50: 534690 } },
             // Mắt
-            { id: 17, name: 'Ocular', category: 'Mắt', pv: 17.2, prices: { 0: 779760, 25: 607300, 35: 538320, 42: 490030, 50: 434840 } },
+            { id: 17, name: 'Ocular', category: 'Mắt', pv: 17.2, prices: { 0: 799200, 25: 622430, 35: 551720, 42: 502220, 50: 445660 } },
             // Vận động
-            { id: 18, name: 'Rebuild', category: 'Vận động', pv: 54.75, prices: { 0: 2370600, 25: 1846110, 35: 1636320, 42: 1489460, 50: 1321630 } },
-            { id: 19, name: 'F1 Sport', category: 'Vận động', pv: 41.6, prices: { 0: 1813320, 25: 1412060, 35: 1251550, 42: 1139200, 50: 1010790 } },
-            { id: 20, name: 'Hydrat', category: 'Vận động', pv: 22.2, prices: { 0: 1142640, 25: 903850, 35: 808340, 42: 741470, 50: 665060 } },
-            { id: 21, name: 'NRG', category: 'Vận động', pv: 14.75, prices: { 0: 658800, 25: 513040, 35: 454740, 42: 413930, 50: 367280 } },
+            { id: 18, name: 'Rebuild', category: 'Vận động', pv: 54.75, prices: { 0: 2430000, 25: 1892400, 35: 1677360, 42: 1526840, 50: 1354800 } },
+            { id: 19, name: 'F1 Sport', category: 'Vận động', pv: 41.6, prices: { 0: 1858680, 25: 1447380, 35: 1282870, 42: 1167700, 50: 1036090 } },
+            { id: 20, name: 'Hydrat', category: 'Vận động', pv: 26.2, prices: { 0: 1170720, 25: 925960, 35: 828060, 42: 759530, 50: 681200 } },
+            { id: 21, name: 'NRG', category: 'Vận động', pv: 14.75, prices: { 0: 675000, 25: 525600, 35: 465840, 42: 424000, 50: 376190 } },
             // Hỗ trợ ngủ ngon và thư giãn
-            { id: 22, name: 'Trà Tâm An', category: 'Hỗ trợ ngủ ngon', pv: 19.8, prices: { 0: 956880, 25: 756960, 35: 677000, 42: 621020, 50: 557050 } },
+            { id: 22, name: 'Trà Tâm An', category: 'Hỗ trợ ngủ ngon', pv: 19.8, prices: { 0: 980640, 25: 775730, 35: 693760, 42: 636380, 50: 570810 } },
+            // TP BVSK Nam giới
+            { id: 23, name: 'Prelox Blue', category: 'TP BVSK Nam giới', pv: 34.65, prices: { 0: 1731240, 25: 1369250, 35: 1224460, 42: 1123100, 50: 1007270 } },
             // Da và Tóc
-            { id: 23, name: 'Beauty Powder 8%', category: 'Da và Tóc', pv: 43.55, prices: { 0: 2246400, 25: 1749350, 35: 1550530, 42: 1411360, 50: 1252300 } },
-            { id: 24, name: 'Mặt nạ giữ ẩm', category: 'Da và Tóc', pv: 12.45, prices: { 0: 576400, 25: 455930, 35: 407740, 42: 374000, 50: 335450 } },
-            { id: 25, name: 'Mặt nạ sáng da', category: 'Da và Tóc', pv: 13.1, prices: { 0: 606100, 25: 479530, 35: 428900, 42: 393460, 50: 352950 } },
-            { id: 26, name: 'Mặt nạ săn chắc', category: 'Da và Tóc', pv: 19.3, prices: { 0: 893200, 25: 706450, 35: 631750, 42: 579470, 50: 519710 } },
-            { id: 27, name: 'Sữa rửa mặt', category: 'Da và Tóc', pv: 16.75, prices: { 0: 707300, 25: 550860, 35: 488280, 42: 444480, 50: 394420 } },
-            { id: 28, name: 'Toner 50 ml', category: 'Da và Tóc', pv: 12.7, prices: { 0: 546700, 25: 425690, 35: 377280, 42: 343400, 50: 304680 } },
-            { id: 29, name: 'Toner 150 ml', category: 'Da và Tóc', pv: 32.3, prices: { 0: 1394800, 25: 1086160, 35: 962700, 42: 876280, 50: 777520 } },
-            { id: 30, name: 'Dưỡng ẩm số 5', category: 'Da và Tóc', pv: 28.4, prices: { 0: 1196800, 25: 932070, 35: 826180, 42: 752060, 50: 667340 } },
-            { id: 31, name: 'Serum số 3', category: 'Da và Tóc', pv: 37.7, prices: { 0: 1608200, 25: 1252400, 35: 1110080, 42: 1010460, 50: 896600 } },
-            { id: 32, name: 'Mắt số 4', category: 'Da và Tóc', pv: 26.35, prices: { 0: 1109900, 25: 864380, 35: 766180, 42: 697430, 50: 618870 } },
-            { id: 33, name: 'Tẩy da chết', category: 'Da và Tóc', pv: 13.1, prices: { 0: 589600, 25: 459110, 35: 406910, 42: 370370, 50: 328610 } },
-            { id: 34, name: 'Mặt nạ đất sét', category: 'Da và Tóc', pv: 14.2, prices: { 0: 643500, 25: 501030, 35: 444040, 42: 404150, 50: 358560 } },
-            { id: 35, name: 'Bộ da cơ bản', category: 'Da và Tóc', pv: 86.25, prices: { 0: 3647600, 25: 2840690, 35: 2517920, 42: 2291990, 50: 2033780 } },
-            { id: 36, name: 'Bộ da nâng cao', category: 'Da và Tóc', pv: 176.65, prices: { 0: 7475600, 25: 5821860, 35: 5160360, 42: 4697310, 50: 4168110 } },
-            { id: 37, name: 'Bộ da Tối ưu', category: 'Da và Tóc', pv: 203.95, prices: { 0: 8708700, 25: 6781990, 35: 6011310, 42: 5471830, 50: 4855290 } },
-            { id: 38, name: 'Dầu gội/xả', category: 'Da và Tóc', pv: 8.3, prices: { 0: 336600, 25: 262250, 35: 232500, 42: 211690, 50: 187890 } }
+            { id: 24, name: 'Beauty Powder 8%', category: 'Da và Tóc', pv: 43.55, prices: { 0: 2302560, 25: 1793090, 35: 1589300, 42: 1446640, 50: 1283610 } },
+            { id: 25, name: 'Mặt nạ giữ ẩm', category: 'Da và Tóc', pv: 12.45, prices: { 0: 579960, 25: 458720, 35: 410220, 42: 376280, 50: 337480 } },
+            { id: 26, name: 'Mặt nạ sáng da', category: 'Da và Tóc', pv: 13.1, prices: { 0: 610200, 25: 482820, 35: 431870, 42: 396200, 50: 355440 } },
+            { id: 27, name: 'Mặt nạ săn chắc', category: 'Da và Tóc', pv: 19.3, prices: { 0: 898560, 25: 710620, 35: 635450, 42: 582830, 50: 522690 } },
+            { id: 28, name: 'Sữa rửa mặt', category: 'Da và Tóc', pv: 16.75, prices: { 0: 711720, 25: 554280, 35: 491310, 42: 447220, 50: 396840 } },
+            { id: 29, name: 'Toner 50 ml', category: 'Da và Tóc', pv: 12.7, prices: { 0: 549720, 25: 427940, 35: 379230, 42: 345130, 50: 306160 } },
+            { id: 30, name: 'Toner 150 ml', category: 'Da và Tóc', pv: 32.3, prices: { 0: 1404000, 25: 1093390, 35: 969150, 42: 882180, 50: 782790 } },
+            { id: 31, name: 'Dưỡng ẩm số 5', category: 'Da và Tóc', pv: 28.4, prices: { 0: 1204200, 25: 937790, 35: 831220, 42: 756630, 50: 671370 } },
+            { id: 32, name: 'Serum số 3', category: 'Da và Tóc', pv: 37.7, prices: { 0: 1618920, 25: 1260860, 35: 1117630, 42: 1017370, 50: 902790 } },
+            { id: 33, name: 'Mắt số 4', category: 'Da và Tóc', pv: 26.35, prices: { 0: 1116720, 25: 869640, 35: 770810, 42: 701630, 50: 622560 } },
+            { id: 34, name: 'Tẩy da chết', category: 'Da và Tóc', pv: 13.1, prices: { 0: 592920, 25: 461600, 35: 409070, 42: 372300, 50: 330270 } },
+            { id: 35, name: 'Mặt nạ đất sét', category: 'Da và Tóc', pv: 14.2, prices: { 0: 648000, 25: 504620, 35: 447270, 42: 407130, 50: 361250 } },
+            { id: 36, name: 'Bộ da cơ bản', category: 'Da và Tóc', pv: 86.25, prices: { 0: 3669840, 25: 2857790, 35: 2532980, 42: 2305600, 50: 2045750 } },
+            { id: 37, name: 'Bộ da nâng cao', category: 'Da và Tóc', pv: 176.65, prices: { 0: 7522200, 25: 5857930, 35: 5192220, 42: 4726230, 50: 4193660 } },
+            { id: 38, name: 'Bộ da Tối ưu', category: 'Da và Tóc', pv: 203.95, prices: { 0: 8763120, 25: 6824150, 35: 6048560, 42: 5505650, 50: 4885180 } },
+            { id: 39, name: 'Dầu gội/xả', category: 'Da và Tóc', pv: 8.3, prices: { 0: 339120, 25: 264290, 35: 234360, 42: 213410, 50: 189470 } }
         ];
 
         // Load dữ liệu: ưu tiên localStorage, nếu chưa có thì dùng dữ liệu gốc
