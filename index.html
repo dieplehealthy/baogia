@@ -41,6 +41,7 @@
         .btn-success { background: var(--success); color: white; }
         .btn-danger { background: #dc3545; color: white; padding: 5px 10px; font-size: 12px; }
         .btn-sm { padding: 5px 10px; font-size: 12px; }
+        .btn-bmi { background: #6f42c1; color: white; flex: 1; }
 
         .card {
             background: var(--white);
@@ -252,6 +253,100 @@
             box-sizing: border-box;
         }
         .empty-msg { text-align: center; color: #999; padding: 20px; font-style: italic; }
+
+        /* ===== BMI Calculator styles ===== */
+        .gender-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .gender-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid var(--border);
+            background: #fff;
+            color: #888;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .gender-btn.active.male {
+            background: #e7f1ff;
+            border-color: #4a90d9;
+            color: #2266b0;
+        }
+        .gender-btn.active.female {
+            background: #ffe9f3;
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .bmi-input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .bmi-field { flex: 1; }
+        .bmi-field label {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        .bmi-field input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .bmi-result {
+            text-align: center;
+            padding: 18px;
+            border-radius: 12px;
+            margin-top: 10px;
+            display: none;
+        }
+        .bmi-result.show { display: block; }
+        .bmi-value {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+        .bmi-label {
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        .bmi-desc {
+            font-size: 12px;
+            color: #666;
+            margin-top: 6px;
+        }
+        .bmi-scale {
+            margin-top: 14px;
+            font-size: 11px;
+        }
+        .bmi-scale-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 8px;
+            border-radius: 6px;
+            margin-bottom: 4px;
+        }
+        .bmi-scale-row.current {
+            font-weight: 700;
+            box-shadow: 0 0 0 2px currentColor inset;
+        }
+        .bmi-note {
+            font-size: 11px;
+            color: #999;
+            margin-top: 10px;
+            font-style: italic;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -261,6 +356,7 @@
 
     <div class="header-actions">
         <button class="btn-primary" onclick="alert('Chức năng đặt hàng / Chuyển đơn!')">🛒 Đặt hàng</button>
+        <button class="btn-bmi" onclick="openBMI()">⚖️ Tính BMI</button>
         <button class="btn-secondary" onclick="openSettings()">⚙️ Cài đặt giá</button>
     </div>
 
@@ -333,6 +429,57 @@
         </div>
     </div>
 
+    <!-- Modal Tính BMI -->
+    <div class="modal" id="bmiModal">
+        <div class="modal-content">
+            <h2 style="margin-top:0; color: #6f42c1;">⚖️ Tính chỉ số BMI</h2>
+            <p style="font-size: 13px; color: #666; margin-top: -5px;">
+                Dành cho người Việt Nam (thang phân loại Châu Á - IDI&WPRO)
+            </p>
+
+            <div class="gender-toggle">
+                <button type="button" class="gender-btn male active" id="genderMaleBtn" onclick="setGender('male')">👨 Nam</button>
+                <button type="button" class="gender-btn female" id="genderFemaleBtn" onclick="setGender('female')">👩 Nữ</button>
+            </div>
+
+            <div class="bmi-input-row">
+                <div class="bmi-field">
+                    <label for="bmiHeight">Chiều cao (cm)</label>
+                    <input type="number" id="bmiHeight" placeholder="VD: 165" inputmode="decimal" oninput="calculateBMI()">
+                </div>
+                <div class="bmi-field">
+                    <label for="bmiWeight">Cân nặng (kg)</label>
+                    <input type="number" id="bmiWeight" placeholder="VD: 58" inputmode="decimal" oninput="calculateBMI()">
+                </div>
+            </div>
+
+            <div class="bmi-input-row" style="margin-top: -4px;">
+                <div class="bmi-field">
+                    <label for="bmiAge">Tuổi (tuỳ chọn)</label>
+                    <input type="number" id="bmiAge" placeholder="VD: 30" inputmode="numeric" oninput="calculateBMI()">
+                </div>
+            </div>
+
+            <div class="bmi-result" id="bmiResult">
+                <div class="bmi-value" id="bmiValueText">--</div>
+                <div class="bmi-label" id="bmiLabelText"></div>
+                <div class="bmi-desc" id="bmiDescText"></div>
+
+                <div class="bmi-scale" id="bmiScale"></div>
+
+                <div class="bmi-note">
+                    * Phân loại theo chuẩn BMI Châu Á (IDI & WPRO) – áp dụng phổ biến tại Việt Nam, khác với chuẩn của WHO dùng cho người Âu - Mỹ.
+                    Cân nặng lý tưởng tham khảo được tính theo công thức BMI = 22 (giữa khoảng bình thường).
+                    Đây chỉ là chỉ số tham khảo, không thay thế tư vấn y tế chuyên môn.
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="btn-secondary" style="flex:1" onclick="closeBMI()">Đóng</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // DỮ LIỆU CẬP NHẬT THEO BẢNG GIÁ 8% THUẾ TỪ NGÀY 10.03.2026
         // Giá trong bảng gốc (nghìn đồng) × 1000 = VNĐ
@@ -388,8 +535,9 @@
             { id: 39, name: 'Dầu gội/xả', category: 'Da và Tóc', pv: 8.3, prices: { 0: 339120, 25: 264290, 35: 234360, 42: 213410, 50: 189470 } }
         ];
 
-        // Load dữ liệu: ưu tiên localStorage, nếu chưa có thì dùng dữ liệu gốc
-        let products = JSON.parse(localStorage.getItem('products')) || DEFAULT_PRODUCTS;
+        // Danh mục sản phẩm LUÔN lấy từ DEFAULT_PRODUCTS trong code (không dùng localStorage nữa)
+        let products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+        // Đơn hàng đang chọn vẫn lưu tạm trong localStorage để không mất khi load lại trang
         let selected = JSON.parse(localStorage.getItem('selected')) || [];
         let discount = 0;
         let currentCategory = 'Tất cả';
@@ -704,13 +852,14 @@
         }
 
         function saveSettings() {
-            localStorage.setItem('products', JSON.stringify(products));
+            // KHÔNG lưu vào localStorage nữa — danh mục sản phẩm chỉ sống trong code (DEFAULT_PRODUCTS)
+            // Thay đổi ở đây chỉ áp dụng tạm trong phiên làm việc hiện tại, sẽ mất khi tải lại trang
             document.getElementById('settingsModal').classList.remove('active');
             renderFilterChips();
             renderSearch();
             renderSelected();
             updateTotals();
-            alert('💾 Đã lưu cài đặt danh mục!');
+            alert('⚠️ Đã áp dụng thay đổi TẠM THỜI cho phiên này.\nThay đổi sẽ MẤT khi tải lại trang vì danh mục sản phẩm luôn lấy từ code.\nMuốn lưu vĩnh viễn: cập nhật trực tiếp trong DEFAULT_PRODUCTS của file HTML.');
         }
 
         function closeSettings() {
@@ -718,14 +867,13 @@
         }
 
         function saveData() {
-            localStorage.setItem('products', JSON.stringify(products));
+            // Chỉ lưu đơn hàng đang chọn (selected) — KHÔNG lưu products nữa
             localStorage.setItem('selected', JSON.stringify(selected));
-            alert('💾 Đã lưu đơn hàng & dữ liệu!');
+            alert('💾 Đã lưu đơn hàng hiện tại! (Danh mục sản phẩm luôn lấy từ code, không cần lưu riêng)');
         }
 
         function resetData() {
-            if (confirm('Khôi phục dữ liệu gốc? Toàn bộ thay đổi sẽ bị mất!')) {
-                localStorage.removeItem('products');
+            if (confirm('Khôi phục lại danh mục sản phẩm gốc trong code? Đơn hàng đang chọn sẽ bị xoá!')) {
                 localStorage.removeItem('selected');
                 products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
                 selected = [];
@@ -734,6 +882,92 @@
                 updateTotals();
                 alert('✅ Đã khôi phục dữ liệu gốc!');
             }
+        }
+
+        // ===================== BMI CALCULATOR =====================
+        // Thang phân loại BMI dành cho người Châu Á (IDI & WPRO) - dùng phổ biến ở Việt Nam
+        // Ngưỡng giống nhau cho nam và nữ trong thang này; phần "gợi ý" diễn giải có lưu ý riêng theo giới.
+        const BMI_SCALE = [
+            { key: 'thieu_can_nang',  label: 'Thiếu cân nặng',       min: 0,    max: 18.5, color: '#3498db' },
+            { key: 'binh_thuong',     label: 'Bình thường',          min: 18.5, max: 23,   color: '#28a745' },
+            { key: 'thua_can',        label: 'Thừa cân (nguy cơ)',   min: 23,   max: 25,   color: '#f0ad4e' },
+            { key: 'beo_phi_1',       label: 'Béo phì độ I',         min: 25,   max: 30,   color: '#ff6b9d' },
+            { key: 'beo_phi_2',       label: 'Béo phì độ II',        min: 30,   max: 999,  color: '#dc3545' }
+        ];
+
+        let currentGender = 'male';
+
+        function setGender(g) {
+            currentGender = g;
+            document.getElementById('genderMaleBtn').classList.toggle('active', g === 'male');
+            document.getElementById('genderFemaleBtn').classList.toggle('active', g === 'female');
+            calculateBMI();
+        }
+
+        function classifyBMI(bmi) {
+            return BMI_SCALE.find(row => bmi >= row.min && bmi < row.max) || BMI_SCALE[BMI_SCALE.length - 1];
+        }
+
+        function calculateBMI() {
+            const heightCm = parseFloat(document.getElementById('bmiHeight').value);
+            const weightKg = parseFloat(document.getElementById('bmiWeight').value);
+            const resultBox = document.getElementById('bmiResult');
+
+            if (!heightCm || !weightKg || heightCm <= 0 || weightKg <= 0) {
+                resultBox.classList.remove('show');
+                return;
+            }
+
+            const heightM = heightCm / 100;
+            const bmi = weightKg / (heightM * heightM);
+            const cls = classifyBMI(bmi);
+
+            // Cân nặng lý tưởng tham khảo (BMI ~ 22, giữa khoảng bình thường 18.5-23)
+            const idealWeight = (22 * heightM * heightM).toFixed(1);
+            const minNormalWeight = (18.5 * heightM * heightM).toFixed(1);
+            const maxNormalWeight = (23 * heightM * heightM).toFixed(1);
+
+            document.getElementById('bmiValueText').innerText = bmi.toFixed(1);
+            document.getElementById('bmiValueText').style.color = cls.color;
+            document.getElementById('bmiLabelText').innerText = (currentGender === 'male' ? '👨 ' : '👩 ') + cls.label;
+            document.getElementById('bmiLabelText').style.color = cls.color;
+
+            let desc = '';
+            if (cls.key === 'thieu_can_nang') {
+                desc = `Cân nặng đang dưới mức khuyến nghị. Khoảng cân nặng bình thường tham khảo cho chiều cao này: ${minNormalWeight} - ${maxNormalWeight} kg.`;
+            } else if (cls.key === 'binh_thuong') {
+                desc = `Cân nặng đang trong khoảng lý tưởng (${minNormalWeight} - ${maxNormalWeight} kg). Cân nặng tham chiếu: ~${idealWeight} kg.`;
+            } else if (cls.key === 'thua_can') {
+                desc = `Đã ở mức nguy cơ thừa cân theo chuẩn Châu Á. Cân nặng bình thường tham khảo: ${minNormalWeight} - ${maxNormalWeight} kg.`;
+            } else {
+                desc = `Đang ở mức béo phì theo chuẩn Châu Á. Cân nặng bình thường tham khảo: ${minNormalWeight} - ${maxNormalWeight} kg. Nên tham khảo ý kiến chuyên gia dinh dưỡng/y tế.`;
+            }
+            document.getElementById('bmiDescText').innerText = desc;
+
+            // Vẽ thang phân loại
+            const scaleContainer = document.getElementById('bmiScale');
+            scaleContainer.innerHTML = BMI_SCALE.map(row => {
+                const isCurrent = row.key === cls.key;
+                const rangeText = row.max >= 999 ? `≥ ${row.min}` : `${row.min} – ${row.max}`;
+                return `
+                    <div class="bmi-scale-row ${isCurrent ? 'current' : ''}" 
+                         style="background:${row.color}1a; color:${row.color};">
+                        <span>${row.label}</span>
+                        <span>${rangeText}</span>
+                    </div>
+                `;
+            }).join('');
+
+            resultBox.classList.add('show');
+        }
+
+        function openBMI() {
+            document.getElementById('bmiModal').classList.add('active');
+            calculateBMI();
+        }
+
+        function closeBMI() {
+            document.getElementById('bmiModal').classList.remove('active');
         }
 
         // Khởi chạy
